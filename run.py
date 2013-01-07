@@ -2,12 +2,15 @@ from pygame import *
 
 GRAVITY = 0.2
 THRUSTER = 0.5
+FUELUSE = 1
 
-pos = [0,0]
-speed = [5,1]
+pos = [620,0]
+speed = [-5,1]
+fuel = 100
 
 init()
 screen = display.set_mode((640,480))
+fonten = font.Font(None, 14)
 run = True
 
 shipImages = [ image.load("ship-%i.png" % i).convert() for i in range(0,3) ]
@@ -41,6 +44,8 @@ while run:
 
         if animCounter == 5:
             animCounter = 0
+
+        fuel -= FUELUSE
     else:
         screen.blit(shipImages[0], (pos[0], pos[1], 20, 20))
 
@@ -51,19 +56,27 @@ while run:
     keys = key.get_pressed()
 
 
-    doAnimate = True
-    if keys[K_UP]:
-        speed[1] -= THRUSTER
-        #print("Thruster up")
-    elif keys[K_LEFT]:
-        speed[0] -= THRUSTER
-        #print("Thruster left")
-    elif keys[K_RIGHT]:
-        speed[0] += THRUSTER
-    else:
+    if fuel <= 0:
+        fuel = 0
         doAnimate = False
+    else:
+        doAnimate = True
+        if keys[K_UP]:
+            speed[1] -= THRUSTER
+            #print("Thruster up")
+        elif keys[K_LEFT]:
+            speed[0] -= THRUSTER
+            #print("Thruster left")
+        elif keys[K_RIGHT]:
+            speed[0] += THRUSTER
+        else:
+            doAnimate = False
 
     speed[1] += GRAVITY
+
+    #Print stats
+    screen.blit(fonten.render("V-Speed: %f" % speed[1], True, (0,255,0)), (10,10,40,100))
+    screen.blit(fonten.render("Fuel: %f" % fuel, True, (0,255,0)), (10,20,40,100))
 
     display.flip()
     time.delay(40)
