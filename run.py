@@ -4,6 +4,9 @@ GRAVITY = 0.2
 THRUSTER = 0.5
 FUELUSE = 1
 
+def endMessage(msg):
+    pass
+
 pos = [620,0]
 speed = [-5,1]
 fuel = 100
@@ -11,6 +14,7 @@ fuel = 100
 init()
 screen = display.set_mode((640,480))
 fonten = font.Font(None, 14)
+messagefont = font.Font(None, 20)
 motorsound = mixer.Sound("motor.wav")
 run = True
 
