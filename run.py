@@ -11,6 +11,7 @@ fuel = 100
 init()
 screen = display.set_mode((640,480))
 fonten = font.Font(None, 14)
+motorsound = mixer.Sound("motor.wav")
 run = True
 
 shipImages = [ image.load("ship-%i.png" % i).convert() for i in range(0,3) ]
@@ -39,6 +40,9 @@ while run:
         run = False
     
     if doAnimate:
+        if not mixer.get_busy():
+            motorsound.play(0)
+
         animCounter += 1
         screen.blit(shipImages[1 + int(animCounter / 3)], (pos[0], pos[1], 20, 20))
 
@@ -59,6 +63,7 @@ while run:
     if fuel <= 0:
         fuel = 0
         doAnimate = False
+        motorsound.stop()
     else:
         doAnimate = True
         if keys[K_UP]:
@@ -71,6 +76,7 @@ while run:
             speed[0] += THRUSTER
         else:
             doAnimate = False
+            motorsound.stop()
 
     speed[1] += GRAVITY
 
